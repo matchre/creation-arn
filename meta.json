@@ -1,0 +1,46 @@
+{
+    "name": "creation-ARN",
+    "width": "800px",
+    "height": "600px",
+    "link": "--lien vers la documentation principale qui permet de faire fonctionner le grain (ex: https://github.com/InriaMecsci/zero/wiki)--",
+    "comment": "Jeu de création d'ARN pour comprendre les enjeux de la bio-informatique sur ces sujets",
+    "links": [
+        {
+            "title": "Document qui documente ce grain",
+            "uri": "http://interstices.info/***"
+        }
+    ],
+    "authors": [
+        {
+            "name": "Ponty, Yann",
+            "role": "concepteur",
+            "mail": "Yann.Ponty@inria.fr",
+            "comment": "auteur scientifique qui a proposé le grain"
+        },
+        {
+            "name": "Guion, Laure",
+            "role": "éditeur"
+        },
+        {
+            "name": "Guerret, François",
+            "role": "auteur",
+            "comment": "version HTLM5/JS"
+        },
+        {
+            "name": "http://www.xprojets.com",
+            "role": "producteur"
+        }
+    ],
+    "licenses": [
+        {
+            "name": "CC BY-NC-SA",
+            "uri": "http://creativecommons.org/licenses/by-nc-sa/3.0/fr",
+            "comment": "s'applique aux documents"
+        },
+        {
+            "name": "CeCILL-C",
+            "uri": "http://www.cecill.info/licences/Licence_CeCILL-C_V1-fr.html",
+            "comment": "s'applique au code source"
+        }
+    ]
+}

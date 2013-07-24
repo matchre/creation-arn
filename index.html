@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.google.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="style.css"/>
+
+<title>Création d'une séquence d'ARN</title>
+
+</head>
+
+<body>
+	<h1>Création d'une séquence d'ARN</h1>
+	
+<div id=marge>
+		<h2>Niveau</h2>
+			<p id=niv> 
+				<button id='modeEasy'>Facile </button> 
+				<button id='modeNormal'>Normal </button>
+				<button id='modeHard'>Difficile </button>
+			</p> 
+			
+		<h2>Présentation</h2>
+				<p id=instructions>
+					Une molécule d'<a href=http://fr.wikipedia.org/wiki/Acide_ribonucl%C3%A9ique>
+					acide ribonucléique (ARN)</a>
+					est constituée d'un enchaînement de nucléotides
+					qui contiennent eux-mêmes différentes bases 
+					qui les distinguent.
+					Ces bases sont au nombre de quatre :
+					l'<i id=ad>adénine (T)</i>,
+					la <i id=gu>guanine (G)</i>,
+					la <i id=cy>cytosine (C)</i>
+					et l'<i id=ur>uracile (U)</i>.
+					Elles peuvent former entre elles
+					des liaisons qui stabilisent la molécule. Celles
+					considérées comme possibles	dans ce jeu sont les
+					liaisons : A-U, G-C et G-U.
+				
+					Ces liaisons vont moduler la géométrie de la molécule,
+					ce qui détermine en partie sa fonction. La molécule 
+					étant d'autant plus stable que les liaisons sont 
+					nombreuses, on considère ici que les séquences d'ARN
+					se replient toujours de manière à maximiser 
+					leur nombre de liaisons.
+					L'objectif de ce jeu est de retrouver les bases d'une
+					séquence d'ARN qui se replie de manière à obtenir la
+					géométrie (la structure) représentée dans la fenêtre
+					<i id='obj'>objectifs</i>.
+					Cliquez sur les bases pour changer leur nature (leur
+					couleur) et recréer ainsi, en un minimum de coup, une
+					molécule satisfaisant la géométrie demandée.
+					
+				</p>
+	</div>
+	
+<div id=screens>
+	<canvas id="objective"> 
+		<p>
+		Si les images ne s'affichent pas, essayez de recharger la page.
+		Si le problème persiste, il est possible que votre navigateur ne
+		supporte pas canvas : il faut qu'il reconnaisse HTML5.
+		Internet Explorer le supporte à partir de la version 9.
+		</p>
+	</canvas>
+	
+	<canvas id="playerScreen"></canvas>
+</div>
+
+<div id=buttons>
+	<button id='start'><span>DEMARRER</span></button>
+	<button id='quit'>ABANDONNER</button>
+	<div id="info">
+		<span id="attempts"
+		title="Nombre de coups restants">0</span>
+		Nombre de liaisons : 
+		<span id="nbOfBondsPlayer" title="de votre séquence">0</span>
+		/
+		<span id="nbOfBondsObj" title="de la séquence objectif">0</span>
+		Configurations :
+		<span id="nbPosPlayer"
+		title="Nombre de configurations optimales qu'admet votre séquence">
+		0</span>
+	</div>
+	<button id='impossible'>ARN impossible</button>
+	<button id='add'>Ajouter une nouvelle molécule à traiter</button>
+</div>	
+	<script type="text/javascript" src="vendor/jquery-1.10.2.js">
+	</script>
+	<script type="text/javascript" src="js/Base.js"></script>
+	<script type="text/javascript" src="js/Loop.js"></script>
+	<script type="text/javascript" src="js/Molecule.js"></script>
+	<script type="text/javascript" src="js/DrawMol.js"></script>
+	<script type="text/javascript" src="js/effects.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	
+	<footer>
+
+	</footer>
+
+</body>
+
+</html>

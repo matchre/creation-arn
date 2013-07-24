@@ -1,0 +1,151 @@
+body
+{
+	background-color : rgb(255,255,255);
+	color : black;
+
+}
+strong
+{
+	color : green;
+	font-size : 20px;
+}
+
+#playerScreen, #objective
+{
+	border : 2px solid;
+	border-color : black; 
+	margin-left:auto;
+	margin-right:auto;
+	width :48%;
+	background-color : aqua;
+}
+#screens
+{
+	width : 80%;
+	float : right;
+	padding : 0px;
+}
+#buttons
+{
+	width : 80%;
+	float : right;
+	margin-right : 20px;
+}
+#info
+{
+	width : 55%;
+	margin-left : auto;
+	margin-right : auto;
+	padding-left : 10px;
+	padding-right : 10px;
+	text-align : center;
+	font-style : italic;
+	background-color : rgb(216,216,216);
+}
+#nbOfBondsObj
+{
+	font-weight : bold;
+	margin-right : 10px;
+}
+#start
+{
+	color : green;
+	font-size : 20px;
+	float : left;
+	margin-left : auto;
+	margin-right : auto;
+}
+#attempts
+{
+	color : green;
+	font-size : 25px;
+	font-family : "impact", fantasy;
+	margin-right : 20px;
+}
+#quit
+{
+	color : red;
+	font-size : 20px;
+	float : right;
+	margin-left : auto;
+	margin-right : auto;
+}
+#add
+{
+	color : blue;
+	font-size : 20px;
+	display : none;
+	margin-left : auto;
+	margin-right : auto;
+}
+#impossible
+{
+	font-size : 20px;
+	color : blue;
+	margin-left : auto;
+	margin-right : auto;
+}
+#marge
+{
+	float : left;
+	width : 150px;
+	background-color : rgb(216,216,216);
+	color : black;
+	text-align : center;
+	padding : 5px;
+	margin : 3px;
+}
+#instructions
+{
+	overflow-y: scroll;
+}
+footer
+{
+	border : 3px black dotted;
+	margin-top : 20px;
+	padding : 10px;
+	text-align : center;
+	clear : both;
+}
+h1
+{
+	font-size : 25px;
+	text-align : center;
+	background-color : yellow;
+}
+h2
+{
+	font-size : 17px;
+	text-align : center;
+}
+/*
+@media only screen and (max-device-width:425px)
+{
+	#marge
+	{
+		width : 100%;
+		text-align : left;
+		padding : 5px;
+		height : 70px;
+		margin : 5px;
+		font-size : 120%;
+	}
+	#niv
+	{
+		float : left;
+		width : 40%;
+	}
+	#instructions
+	{
+		float : right;
+		overflow-y: scroll;
+		height : 50px;
+		width : 50%;
+	}
+	h2
+	{
+	display : none;
+	}
+}
+
+*/
