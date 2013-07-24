@@ -1,6 +1,6 @@
 {
     "name": "creation-ARN",
-    "width": "800px",
+    "width": "900px",
     "height": "600px",
     "link": "--lien vers la documentation principale qui permet de faire fonctionner le grain (ex: https://github.com/InriaMecsci/zero/wiki)--",
     "comment": "Jeu de création d'ARN pour comprendre les enjeux de la bio-informatique sur ces sujets",
