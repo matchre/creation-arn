@@ -1,0 +1,99 @@
+number:{1}
+name:{Tutoriel 1}
+time:{10000}
+comments:{
+Les règles du jeu et quelques informations sont détaillées dans le bandeau de gauche.
+Les informations concernants les différents niveaux seront toujours affichées dans ce bandeau.
+Après les avoir lues, cliquez sur DEMARRER et tentez de reproduire la structure cible !
+Gagner un niveau vous donnera accès à des niveaux supérieurs, pensez à noter le mot de passe du dernier niveau débloqué en fin de partie pour pouvoir revenir directement où vous vous êtes arrêté lors d'une visite ultérieure.
+Les niveaux ont été conçus par difficulté croissante, nous vous conseillons de les essayer dans l'ordre plutôt que d'aller au niveau débloqué le plus difficile immédiatement.
+Validez au moins les trois niveaux de tutoriel !}
+password:{OOOO}
+solution:{AAACUG}
+incomplete sequences:{AAAOOO}
+
+number:{2}
+name:{Tutoriel 2}
+time:{10000}
+comments:{Une même séquence peut admettre plusieurs co-optimaux, c'est-à-dire plusieurs structures (géométries) contenant le nombre de liaison maximal donc étant les plus stables.
+Pour passer d'une géométrie optimale à une autre, il vous suffit de cliquer sur le bouton muni des deux flèches bleues.
+
+Remarque : Pour recommencer le niveau courant, cliquez sur bouton qui porte son nom sous le bouton MENU.}
+password:{OOOO}
+solution:{AGCAUGCACUG}
+incomplete sequences:{OOOOOOOOOOO}
+
+number:{3}
+name:{Tutoriel 3}
+time:{1000}
+comments:{Les chercheurs, qui veulent reproduire exactement une géométrie donnée, ont pour objectif de déterminer des séquences qui n'admettent qu'un seul repliement maximisant le nombre de liaisons.
+Votre objectif est à présent de trouver une séquence n'admettant qu'un seul repliement optimal.
+Attention, pour certaines géométries, cela n'est pas possible, cliquez alors sur "ARN impossible".
+Dans les niveaux à venir la présence de ce bouton vous indiquera si l'on attend une géométrie unique ou non...}
+password:{OOOO}
+solution:{CACAACGAAGUGA}
+one structure only:{possible}
+incomplete sequences:{COOOOOOOOOOOA,
+COOAOOOOOOOOO,
+OOOOOOOOOOOGO}
+
+number:{4}
+name:{Débutant 1}
+time:{90}
+comments:{Le temps vous est à présent compté, vous avez une minute et demie pour trouver la solution !
+Astuce : pour modifier plusieurs bases avant de relancer le calcul d'optimisation maintenez une touche du clavier enfoncée.
+Le calcul sera lancé dès que vous relacherez cette touche.}
+password:{OIHU}
+solution:{CACAACGAAGAAGA}
+incomplete sequences:{OOOOOOOOOOOOOA,
+COOOOOOOOOOOOO,
+OOOOOOOOOOOOGO}
+
+number:{5}
+name:{Débutant 2}
+time:{30}
+comments:{Astuce : pour modifier plusieurs bases avant de relancer le calcul d'optimisation maintenez une touche du clavier enfoncée.
+Le calcul sera lancé dès que vous relacherez cette touche.}
+password:{KHGU}
+solution:{ACUGCAUCGAUGCUAGCUAAUCGAU}
+incomplete sequences:{ACUOOOOOGAUGCUAGCOOOOOOAU,
+ACUGCAUCGOOGCUAGCUAOOOOOO,
+ACUGCAUCOOOGCUAGCOOOUCOOO}
+
+number:{6}
+name:{Normal 1}
+time:{100}
+comments:{}
+password:{QXOAT}
+solution:{AUUCCAAAAAUGCUAGCUAAUCGAU}
+incomplete sequences:{OOOOOAAAAAUGCUAGOOOOUCGAU,
+OOOCCAAOOAUGCUAGCOOOUCGOO,
+AOOOOOAAAAUGCUAGCUOOOOGAU}
+
+number:{7}
+name:{Normal 2}
+time:{150}
+comments:{ATTENTION : vous devez créer une séquence n'admettant qu'une seule structure (géométrie) la plus stable.
+Le nombre de co-optimaux de votre proposition est indiqué après "Configurations".}
+password:{HGHJJ}
+one structure only:{possible}
+solution:{CGGGCACUCUUCGAA}
+incomplete sequences:{OGOOCOOOOOOOOOA,
+OOOOOAOOOOUCOOO}
+
+number:{8}
+name:{Normal 3}
+time:{200}
+comments:{Trouvez une séquence dont un des co-optimaux correspond à la structure demandée.}
+password:{KGHFW}
+solution:{ACGUGUGUUACUACUAGCUACUACUACAUCAUG}
+incomplete sequences:{OOOUGUGOUACOOOUAGCUACUAOOOCAUCOOO}
+
+number:{9}
+name:{Normal 4}
+time:{400}
+comments:{ATTENTION : vous devez créer une séquence n'admettant qu'une seule structure (géométrie) la plus stable.}
+password:{XPOAJ}
+structure:{(..(((...(.)))(.())).)}
+one structure only:{not possible}
+incomplete sequences:{OOOOOOOOOOOOOOOOOOAOOO}

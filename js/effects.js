@@ -33,29 +33,22 @@ function initEffects()
 		$(this).css('color','black');
 		$("#objective").css('border-color','black');
 	});
-	$("#ad").bind("mouseover", function() {
-		$(this).css('color','green');
+	$("#playerScreen").keydown(function(e) {
+		keyDown=1;
 	});
-	$("#ad").bind("mouseout", function() {
-		$(this).css('color','black');
+	$("#playerScreen").keyup(function(e) {
+		if(running==0 || quit==1)
+			return;
+		keyDown=0;
+		attempt();
 	});
-	$("#cy").bind("mouseover", function() {
-		$(this).css('color','orange');
+	$("#playerScreen").bind('mouseover',function(e){
+		$(this).focus();
 	});
-	$("#cy").bind("mouseout", function() {
-		$(this).css('color','black');
-	});
-	$("#gu").bind("mouseover", function() {
-		$(this).css('color','blue');
-	});
-	$("#gu").bind("mouseout", function() {
-		$(this).css('color','black');
-	});
-	$("#ur").bind("mouseover", function() {
-		$(this).css('color','red');
-	});
-	$("#ur").bind("mouseout", function() {
-		$(this).css('color','black');
+	$("#switch").click(function(e){
+		if(running==0 || quit==1 || playerMol.nbOptStructures==1)
+			return;
+		switchMol();
 	});
 	$("#playerScreen").click(function(e) {
 		if(running==0 || quit==1)
@@ -68,10 +61,8 @@ function initEffects()
 		var offsetY = 0;
 		do
 		{
-			offsetX += currentElement.offsetLeft
-						-currentElement.scrollLeft;
-			offsetY += currentElement.offsetTop
-						-currentElement.scrollTop;
+			offsetX += currentElement.offsetLeft;
+			offsetY += currentElement.offsetTop;
 		}while(currentElement = currentElement.offsetParent)
 			
 		x=e.pageX - offsetX;
@@ -87,79 +78,120 @@ function initEffects()
 		//~ console.log('Base: '+getMin.closest.rank +'  '+getMin.minDist
 							//~ +' x: '+getMin.closest.X+' y: '
 							//~ +getMin.closest.Y);
+		
+		if(!keyDown)
+			attempt();
 	});
-	$("#instructions").bind("mouseover", function() {
-		if(running==1)
+	$('#levelMenu').click(function() {
+		if(quit==1)
+		{
+			initGame();
+		}
+		else if(running==0)
 			return;
-		var canvas;
-		canvas = document.getElementById("objective");
-		if (canvas.getContext)
-			var ctx = canvas.getContext("2d");
-		else return;
-		var r = canvas.width/18;
-		var unBase = new Base(0,0,r);
-		var adBase = new Base(0,1,r);
-		var cyBase = new Base(1,2,r);
-		var guBase = new Base(0,3,r);
-		var urBase = new Base(1,4,r);
-		
-		ctx.beginPath();
-		ctx.strokeStyle = "blue";
-		ctx.lineWidth = 2;
-		ctx.moveTo(2*r,2*r);
-		ctx.lineTo(6*r,2*r);
-		ctx.moveTo(2*r,6*r);
-		ctx.lineTo(6*r,6*r);
-		ctx.moveTo(2*r,10*r);
-		ctx.lineTo(6*r,10*r);
-		
-		ctx.stroke();
-		ctx.closePath();
-		
-		ctx.font=(r-1)+'px Georgia';
-		ctx.fillStyle = 'black';
-		
-		ctx.fillText('Adénine',r/2,4*r);
-		adBase.X=2*r;
-		adBase.Y=2*r;
-		ctx.fillText('Uracile',5*r,4*r);
-		urBase.X=6*r;
-		urBase.Y=2*r;
-		adBase.draw(true);
-		urBase.draw(true);
-		ctx.fillText('Guanine',r/2,8*r);
-		guBase.X=2*r;
-		guBase.Y=6*r;
-		ctx.fillText('Cytosine',5*r,8*r);
-		cyBase.X=6*r;
-		cyBase.Y=6*r;
-		guBase.draw(true);
-		cyBase.draw(true);
-		ctx.fillText('Guanine',r/2,12*r);
-		guBase.X=2*r;
-		guBase.Y=10*r;
-		ctx.fillText('Uracile',5*r,12*r);
-		urBase.X=6*r;
-		urBase.Y=10*r;
-		guBase.draw(true);
-		urBase.draw(true);
-		ctx.fillText('Base à définir',3*r+(r/2),14*r+(r/2));
-		unBase.X=2*r;
-		unBase.Y=14*r;
-		unBase.draw(true);
-		
-		ctx.font=(r+3)+'px Georgia';
-		ctx.strokeText('Les liaisons possibles',canvas.width/3,17*r);
+		else if(confirm('Voulez-vous vraiment quitter ?'))
+			gameOver();
 	});
-	$("#instructions").bind("mouseout", function() {
-		if(running==1)
+	$('#levelName').click(function() {
+		if(quit==1)
+		{
+			initGame();
+			$('#selectLevel').css('display','none');
+			$('#shadowing').css('display','none');
+			if(currentLevel.password=='OOOO')
+				startTuto();
+			else
+				start();
+		}
+		else if(running==0)
 			return;
-		var canvas;
-		canvas = document.getElementById("objective");
-		if (canvas.getContext)
-			var ctx = canvas.getContext("2d");
-		else return;
-		//We clear the canvas
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		else if(confirm('Voulez-vous vraiment quitter ?'))
+			gameOver();
+	});	
+	$("#start").click(function() {
+	var canvas = document.getElementById('objective');
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    $(this).css('display','none');
+    start();
 	});
-}	
+	$('#impossible').click(function() {
+	if(confirm('Êtes-vous sûr que cette structure n\'est pas '
+				+'réalisable de manière unique ?'))
+		{
+			if(answer.nbOptStructures!=1)
+				won();
+			else
+				gameOver();
+		}
+	});
+}
+
+/*** Tutorial Canvas ****/
+function drawCanvasTuto()
+{
+	var canvas;
+	canvas = document.getElementById("objective");
+	if (canvas.getContext)
+		var ctx = canvas.getContext("2d");
+	else return;
+	var r = canvas.width/18;
+	var unBase = new Base(0,0,r);
+	var adBase = new Base(0,1,r);
+	var cyBase = new Base(1,2,r);
+	var guBase = new Base(0,3,r);
+	var urBase = new Base(1,4,r);
+		
+	ctx.beginPath();
+	ctx.strokeStyle = "blue";
+	ctx.lineWidth = 2;
+	ctx.moveTo(2*r,2*r);
+	ctx.lineTo(6*r,2*r);
+	ctx.moveTo(2*r,6*r);
+	ctx.lineTo(6*r,6*r);
+	ctx.moveTo(2*r,10*r);
+	ctx.lineTo(6*r,10*r);
+		
+	ctx.stroke();
+	ctx.closePath();
+		
+	ctx.font=(r-1)+'px Georgia';
+	ctx.fillStyle = 'black';
+		
+	ctx.fillText('Adénine',r/2,4*r);
+	adBase.X=2*r;
+	adBase.Y=2*r;
+	ctx.fillText('Uracile',5*r,4*r);
+	urBase.X=6*r;
+	urBase.Y=2*r;
+	adBase.draw(true);
+	urBase.draw(true);
+	ctx.fillStyle = 'black';
+	ctx.fillText('Guanine',r/2,8*r);
+	guBase.X=2*r;
+	guBase.Y=6*r;
+	ctx.fillText('Cytosine',5*r,8*r);
+	cyBase.X=6*r;
+	cyBase.Y=6*r;
+	guBase.draw(true);
+	cyBase.draw(true);
+	ctx.fillStyle = 'black';
+	ctx.fillText('Guanine',r/2,12*r);
+	guBase.X=2*r;
+	guBase.Y=10*r;
+	ctx.fillText('Uracile',5*r,12*r);
+	urBase.X=6*r;
+	urBase.Y=10*r;
+	guBase.draw(true);
+	urBase.draw(true);
+	ctx.fillStyle = 'black';
+	ctx.fillText('Base à définir',3*r+(r/2),14*r+(r/2));
+	unBase.X=2*r;
+	unBase.Y=14*r;
+	unBase.draw(true);
+	ctx.fillStyle = 'black';
+	ctx.lineWidth = 1;
+		
+	ctx.font=(r+3)+'px Georgia';
+	ctx.strokeText('Les liaisons possibles',canvas.width/3,17*r);
+}

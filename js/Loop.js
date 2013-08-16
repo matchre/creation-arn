@@ -139,6 +139,7 @@ function Loop(firstBase, lastBase)
 	//draw the skeleton of the current Loop and his sons
 	this.draw = function(isObjective)
 	{
+		
 		if (isObjective)
 			var canvas = document.getElementById("objective");
 		else
@@ -147,13 +148,22 @@ function Loop(firstBase, lastBase)
 		if (!canvas.getContext) return;
 		var ctx = canvas.getContext("2d");
 		
+		ctx.beginPath();
+		ctx.moveTo(this.firstBase.X,this.firstBase.Y);	
+		ctx.lineTo(this.lastBase.X,this.lastBase.Y);
+		ctx.strokeStyle = "blue";
+		ctx.lineWidth = 5;
+		ctx.stroke();
+		ctx.closePath();
+		
 		if(this.nbBases==2)
 		{
+			
 			ctx.beginPath();
 			ctx.moveTo(this.firstBase.X,this.firstBase.Y);	
 			//number of pixels between the line and the control point
 			//in case of a bond between to successive bases
-			var nbPx=2*this.firstBase.r;
+			var nbPx=4*this.firstBase.r;
 			
 			var deltaX = this.lastBase.X - this.firstBase.X ;
 			var deltaY = this.lastBase.Y - this.firstBase.Y ;
@@ -163,7 +173,7 @@ function Loop(firstBase, lastBase)
 			var yCtrl=0;
 			var a=0;
 			if(deltaX > 0)
-			{
+			{	
 				a=deltaY/deltaX;
 				xCtrl=Math.floor(
 						((this.lastBase.X + this.firstBase.X)/2)
@@ -199,30 +209,24 @@ function Loop(firstBase, lastBase)
 			
 			ctx. quadraticCurveTo(xCtrl, yCtrl,
 				this.lastBase.X, this.lastBase.Y);
-			ctx.strokeStyle = "blue";
-			ctx.lineWidth = 5;
+			ctx.strokeStyle = "black";
+			ctx.lineWidth = 2;
 			ctx.stroke();
 			ctx.closePath();
 			return;
 		}
-		
-		ctx.beginPath();
-		ctx.moveTo(this.firstBase.X,this.firstBase.Y);	
-		ctx.lineTo(this.lastBase.X,this.lastBase.Y);
-		ctx.strokeStyle = "blue";
-		ctx.lineWidth = 5;
-		ctx.stroke();
-		ctx.closePath();
-		
+
 		ctx.beginPath();
 		ctx.strokeStyle = "black";
-		ctx.lineWidth = 1;
+		ctx.lineWidth = 2;
 		//bond between firstBase and arrayBase[0]
 		ctx.moveTo(this.firstBase.X,this.firstBase.Y);	
 		ctx.lineTo(this.arrayBases[0].X,this.arrayBases[0].Y);
 		for(var j=0; j<this.arrayBases.length-1; j++) 
 		{	
 			if((this.arrayBases[j].rank+1)==this.arrayBases[j+1].rank)
+			//no matter if j and j+1 are bonded we will draw the
+			//blue stroke above the black one
 			{
 			ctx.moveTo(this.arrayBases[j].X,this.arrayBases[j].Y);	
 			ctx.lineTo(this.arrayBases[j+1].X,this.arrayBases[j+1].Y);
@@ -242,6 +246,7 @@ function Loop(firstBase, lastBase)
 	//draw the skeleton of the main loop
 	this.drawMainLoop= function(isBuckled, isObjective)
 	{
+		
 		if(isBuckled)
 		{
 			this.draw(isObjective);
@@ -259,7 +264,7 @@ function Loop(firstBase, lastBase)
 		
 		ctx.beginPath();
 		ctx.strokeStyle = "black";
-		ctx.lineWidth = 1;
+		ctx.lineWidth = 2;
 		//bond between firstBase and arrayBase[0]
 		ctx.moveTo(this.firstBase.X,this.firstBase.Y);	
 		ctx.lineTo(this.arrayBases[0].X,this.arrayBases[0].Y);
@@ -432,6 +437,35 @@ function Loop(firstBase, lastBase)
 		for(var k=0; k<this.sons.length; k++)
 			this.sons[k].print();
 	}
+	
+	this.copyBases = function(tabBases)
+	{
+		tabBases[this.firstBase.rank]
+				= new Base(this.firstBase.rank,
+					this.firstBase.nat,
+					this.firstBase.r);
+		tabBases[this.firstBase.rank].X = this.firstBase.X;
+		tabBases[this.firstBase.rank].Y = this.firstBase.Y;
+		tabBases[this.lastBase.rank]
+				= new Base(this.lastBase.rank,
+					this.lastBase.nat,
+					this.lastBase.r);
+		tabBases[this.lastBase.rank].X = this.lastBase.X;
+		tabBases[this.lastBase.rank].Y = this.lastBase.Y;
+		
+		for(var j=0; j<this.arrayBases.length; j++)
+		{
+			tabBases[this.arrayBases[j].rank]
+				= new Base(this.arrayBases[j].rank,
+					this.arrayBases[j].nat,
+					this.arrayBases[j].r);
+			tabBases[this.arrayBases[j].rank].X = this.arrayBases[j].X;
+			tabBases[this.arrayBases[j].rank].Y = this.arrayBases[j].Y;
+		}
+		for(var k=0; k<this.sons.length; k++)
+			this.sons[k].copyBases(tabBases);
+	}
+	
 }
 
 //return the catesian distance between two points

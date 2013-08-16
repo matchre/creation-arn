@@ -13,51 +13,61 @@
 </head>
 
 <body>
-	<h1>Création d'une séquence d'ARN</h1>
-	
+	<h1 id='title'>Création d'une séquence d'ARN</h1>
+	<h1 id='basesColor'>
+			<i style="color:green">adénine (A)</i>
+			<i style="color:blue">guanine (G)</i>
+			<i style="color:orange">cytosine (C)</i>
+			<i style="color:red">uracile (U)</i>
+			Liaisons possibles : A-U, G-C et G-U
+	</h1>
 <div id=marge>
-		<h2>Niveau</h2>
-			<p id=niv> 
-				<button id='modeEasy'>Facile </button> 
-				<button id='modeNormal'>Normal </button>
-				<button id='modeHard'>Difficile </button>
-			</p> 
+
+		<p id=niv> 
+			<button id='levelMenu'><span>Menu</span></button> 
+			<button id='levelName'><span></span></button>
+		</p> 
+		
+	<h2 id=margeTitle>Présentation</h2>
+		<p id=instructions>
+			Une molécule d'<a href=http://fr.wikipedia.org/wiki/Acide_ribonucl%C3%A9ique>
+			acide ribonucléique (ARN)</a>
+			est constituée d'un enchaînement de nucléotides
+			qui contiennent eux-mêmes différentes bases 
+			qui les distinguent.
+			Ces bases sont au nombre de quatre :
+			l'<i style="color:green">adénine (A)</i>,
+			la <i style="color:blue">guanine (G)</i>,
+			la <i style="color:orange">cytosine (C)</i>
+			et l'<i style="color:red">uracile (U)</i>.
+			Elles peuvent former entre elles
+			des liaisons qui stabilisent la molécule. Celles
+			considérées comme possibles	dans ce jeu sont les
+			liaisons : A-U, G-C et G-U. Le squelette de la séquence est
+			représenté en noir et les liaisons sont représentées en
+			bleu.
+		
+			Ces liaisons vont moduler la géométrie de la molécule,
+			ce qui détermine en partie sa fonction. La molécule 
+			étant d'autant plus stable que les liaisons sont 
+			nombreuses, on considère ici que les séquences d'ARN
+			se replient toujours de manière à maximiser 
+			leur nombre de liaisons.
+			L'objectif de ce jeu est de retrouver la nature des bases
+			d'une séquence d'ARN qui se replie de manière à obtenir la
+			géométrie (la structure) représentée dans la fenêtre
+			<i id='obj'>objectifs</i>.
+			Cliquez sur les bases pour changer leur nature (leur
+			couleur) et recréer ainsi, en un minimum de coup, une
+			molécule satisfaisant la géométrie demandée.
 			
-		<h2>Présentation</h2>
-				<p id=instructions>
-					Une molécule d'<a href=http://fr.wikipedia.org/wiki/Acide_ribonucl%C3%A9ique>
-					acide ribonucléique (ARN)</a>
-					est constituée d'un enchaînement de nucléotides
-					qui contiennent eux-mêmes différentes bases 
-					qui les distinguent.
-					Ces bases sont au nombre de quatre :
-					l'<i id=ad>adénine (T)</i>,
-					la <i id=gu>guanine (G)</i>,
-					la <i id=cy>cytosine (C)</i>
-					et l'<i id=ur>uracile (U)</i>.
-					Elles peuvent former entre elles
-					des liaisons qui stabilisent la molécule. Celles
-					considérées comme possibles	dans ce jeu sont les
-					liaisons : A-U, G-C et G-U.
-				
-					Ces liaisons vont moduler la géométrie de la molécule,
-					ce qui détermine en partie sa fonction. La molécule 
-					étant d'autant plus stable que les liaisons sont 
-					nombreuses, on considère ici que les séquences d'ARN
-					se replient toujours de manière à maximiser 
-					leur nombre de liaisons.
-					L'objectif de ce jeu est de retrouver les bases d'une
-					séquence d'ARN qui se replie de manière à obtenir la
-					géométrie (la structure) représentée dans la fenêtre
-					<i id='obj'>objectifs</i>.
-					Cliquez sur les bases pour changer leur nature (leur
-					couleur) et recréer ainsi, en un minimum de coup, une
-					molécule satisfaisant la géométrie demandée.
-					
-				</p>
-	</div>
-	
-<div id=screens>
+		</p>
+</div>
+<div id='shadowing'></div>
+<div id='selectLevel'>
+	<h1>Choisissez un niveau</h1>
+</div>
+<div id='screens'>
 	<canvas id="objective"> 
 		<p>
 		Si les images ne s'affichent pas, essayez de recharger la page.
@@ -67,15 +77,14 @@
 		</p>
 	</canvas>
 	
-	<canvas id="playerScreen"></canvas>
+	<canvas id="playerScreen" tabindex="1"></canvas>
 </div>
 
-<div id=buttons>
+<div id='buttons'>
 	<button id='start'><span>DEMARRER</span></button>
-	<button id='quit'>ABANDONNER</button>
+	<button id='switch'><!--<img src='img/switch.png' width=35px height=35px >--></button>
 	<div id="info">
-		<span id="attempts"
-		title="Nombre de coups restants">0</span>
+		<span id="timeLeft">0</span>
 		Nombre de liaisons : 
 		<span id="nbOfBondsPlayer" title="de votre séquence">0</span>
 		/
@@ -86,20 +95,19 @@
 		0</span>
 	</div>
 	<button id='impossible'>ARN impossible</button>
-	<button id='add'>Ajouter une nouvelle molécule à traiter</button>
-</div>	
+</div>
+<!--
+	<script id="fileLevels" type="file" src="levels"></script>
+-->
 	<script type="text/javascript" src="vendor/jquery-1.10.2.js">
 	</script>
+	<script type="text/javascript" src="js/Level.js"></script>
 	<script type="text/javascript" src="js/Base.js"></script>
 	<script type="text/javascript" src="js/Loop.js"></script>
 	<script type="text/javascript" src="js/Molecule.js"></script>
 	<script type="text/javascript" src="js/DrawMol.js"></script>
 	<script type="text/javascript" src="js/effects.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
-	
-	<footer>
-
-	</footer>
 
 </body>
 

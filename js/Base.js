@@ -42,65 +42,65 @@ function Base(rank, nat, rBase)
 		
 		var ctx = canvas.getContext("2d");
 		ctx.beginPath();
-		ctx.strokeStyle = "black";
-		ctx.lineWidth = 1;
+		if(this.natDef)
+		{
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = 1;
+		}
+		else
+		{
+			ctx.strokeStyle = "black";
+			ctx.lineWidth = 3;
+		}
+		
 		// Create gradient
+		var grd=ctx.createRadialGradient(this.X,this.Y,2,
+												this.X,this.Y,this.r+3);
+		var a=0;
+		var b=1;
+
+		if(this.natDef)
+		{
+			a=1;
+			b=0;
+		}
 		switch(this.nat)
 		{
-			case 0 :
-				var grd=ctx.createRadialGradient(this.X,this.Y,2,
-												this.X,this.Y,this.r+3);
-				grd.addColorStop(0,"black");
-				grd.addColorStop(1,"grey");
+			case 0 :		
+				grd.addColorStop(a,"black");
+				grd.addColorStop(b,"grey");
 				break;
 			case 1 :
-				var grd=ctx.createRadialGradient(this.X,this.Y,2,
-												this.X,this.Y,this.r+3);
-				grd.addColorStop(0,"green");
-				grd.addColorStop(1,"white");
+				grd.addColorStop(a,"green");
+				grd.addColorStop(b,"white");
 				break;
 			case 2 :
-				var grd=ctx.createRadialGradient(this.X,this.Y,2,
-												this.X,this.Y,this.r+3);
-				grd.addColorStop(0,"orange");
-				grd.addColorStop(1,"white");
+				grd.addColorStop(a,"orange");
+				grd.addColorStop(b,"white");
 				break;
 			case 3 :
-				var grd=ctx.createRadialGradient(this.X,this.Y,2,
-												this.X,this.Y,this.r+3);
-				grd.addColorStop(0,"blue");
-				grd.addColorStop(1,"white");
+				grd.addColorStop(a,"blue");
+				grd.addColorStop(b,"white");
 				break;
 			case 4 :
-				var grd=ctx.createRadialGradient(this.X,this.Y,2,
-												this.X,this.Y,this.r+3);
-				grd.addColorStop(0,"red");
-				grd.addColorStop(1,"white");
+				grd.addColorStop(a,"red");
+				grd.addColorStop(b,"white");
 				break;
 			default :
-				var grd=ctx.createRadialGradient(this.X,this.Y,2,
-												this.X,this.Y,this.r+3);
-				grd.addColorStop(0,"black");
-				grd.addColorStop(1,"white");
-			}			
-			
+				grd.addColorStop(a,"black");
+				grd.addColorStop(b,"white");
+		}
 		// Fill with gradient
 		ctx.fillStyle=grd;
 		ctx.arc(this.X,this.Y,this.r,0,2*Math.PI,false);
 		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();
-		if(this.nat==0)//or a getMode to avoid global variables
+		if(this.rank%5==4 || this.rank==0)//only useful for big molecules
 		{
 			ctx.font=this.r+'px Georgia';
-			ctx.fillStyle='white';
-			ctx.fillText(this.rank,(this.X-(this.r/2)),(this.Y+(this.r/3)));
-		}
-		else
-		{
-			ctx.font=this.r+'px Georgia';
-			ctx.fillStyle='black';
-			ctx.fillText(this.rank,(this.X-(this.r/2)),(this.Y+(this.r/3)));
+			(this.nat==0)?ctx.fillStyle='white':ctx.fillStyle='black';
+			ctx.fillText((this.rank+1),(this.X-(this.r/2)),(this.Y+(this.r/3)));
 		}
 	}
 }

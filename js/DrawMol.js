@@ -8,10 +8,10 @@ function DrawMol(mol)
 	this.mainLoop;//defined in draw()
 	this.scale;//defined in draw()
 	this.translation = new Array(2);//defined in draw()
-	var rBase=0;
+	this.rBase=0;
 	/*****/
 		
-	this.draw = function(isObjective)
+	this.build = function(isObjective)
 	{
 		var canvas;
 		if(isObjective)
@@ -22,14 +22,12 @@ function DrawMol(mol)
 		if (canvas.getContext)
 			var ctx = canvas.getContext("2d");
 		else return;
-		//We clear the canvas
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
-		rBase = canvas.width/17;//because of the rescaling, 
+		this.rBase = canvas.width/17;//because of the rescaling, 
 							//rBase controls the appearance of the bases
-		var firstBase = new Base(0, this.mol.bases[0],rBase);
+		var firstBase = new Base(0, this.mol.bases[0],this.rBase);
 		var lastBase = new Base(this.mol.size-1, 
-						this.mol.bases[this.mol.size-1],rBase);
+						this.mol.bases[this.mol.size-1],this.rBase);
 		
 		this.mainLoop = new Loop(firstBase,lastBase);
 		
@@ -40,7 +38,7 @@ function DrawMol(mol)
 			this.mol.structure[0]!=this.mol.size-1)
 		{
 			var newBase = new Base(this.mol.structure[0],
-							this.mol.bases[mol.structure[0]],rBase);
+							this.mol.bases[mol.structure[0]],this.rBase);
 			this.mainLoop.addBase(newBase);
 			var newLoop = new Loop(firstBase,newBase);
 			this.fillLoop(newLoop, 0);
@@ -50,14 +48,14 @@ function DrawMol(mol)
 		
 		while(k < this.mol.size-1)
 		{
-			var newBase = new Base(k,this.mol.bases[k],rBase);
+			var newBase = new Base(k,this.mol.bases[k],this.rBase);
 			this.mainLoop.addBase(newBase);
 			//bond between k and another Base (not the last one)
 			if(this.mol.structure[k]>k &&
 				this.mol.structure[k]<(this.mol.size-1))
 				{
 					var newBase1 = new Base(this.mol.structure[k],
-						this.mol.bases[this.mol.structure[k]],rBase);
+						this.mol.bases[this.mol.structure[k]],this.rBase);
 					this.mainLoop.addBase(newBase1);
 					var newLoop = new Loop(newBase,newBase1);
 					this.fillLoop(newLoop, k);
@@ -77,34 +75,49 @@ function DrawMol(mol)
 				k++;
 		}
 		
-		/////////WE DRAW THE MOLECULE////////////
 		firstBase.X=canvas.width/2;
 		firstBase.Y=canvas.height/2;
 		lastBase.X=canvas.width/2;
-		lastBase.Y=canvas.height/2 + 4*rBase;
-		this.mainLoop.determineCoords(rBase, isObjective);
+		lastBase.Y=canvas.height/2 + 4*this.rBase;
+		this.mainLoop.determineCoords(this.rBase, isObjective);
+		
+		//We clear the canvas
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		//We extend the molecule as much as possible:
-		var maxX = this.mainLoop.getMaxX()+rBase;
-		var maxY = this.mainLoop.getMaxY()+rBase;
-		var minX = this.mainLoop.getMinX()-rBase;
-		var minY = this.mainLoop.getMinY()-rBase;
-		this.scale = Math.min(0.95*canvas.width/(maxX-minX),
-							 0.95*canvas.height/(maxY-minY));
-		this.translation[0]= 7-minX;
-		this.translation[1]= 7-minY;
+		var maxX = this.mainLoop.getMaxX()+this.rBase;
+		var maxY = this.mainLoop.getMaxY()+this.rBase;
+		var minX = this.mainLoop.getMinX()-this.rBase;
+		var minY = this.mainLoop.getMinY()-this.rBase;
+		this.scale = Math.min((canvas.width-15-2*this.rBase)/(maxX-minX),
+							 (canvas.height-15-2*this.rBase)/(maxY-minY));
+		this.translation[0]= 25-minX;
+		this.translation[1]= 25-minY;
+				
+	}
+	
+	this.draw=function(isObjective)
+	{
+		var canvas;
+		if(isObjective)
+			canvas = document.getElementById("objective");
+		else
+			canvas = document.getElementById("playerScreen");
+			
+		if (canvas.getContext)
+			var ctx = canvas.getContext("2d");
+		else return;
+		
 		ctx.scale(this.scale,this.scale);//must be before translate
 		ctx.translate(this.translation[0], this.translation[1]);
 		//~ ctx.setTransform(this.scale, 0,0,this.scale,
 			//~ this.translation[0], this.translation[1]);
 			//does not work properly
-		
-		
 		//We draw the skeleton :
 		this.mainLoop.drawMainLoop(
 			(this.mol.structure[0]==(this.mol.size-1)),isObjective);
 		//We draw the bases:
-		firstBase.draw(isObjective);
-		lastBase.draw(isObjective);
+		this.mainLoop.firstBase.draw(isObjective);
+		this.mainLoop.lastBase.draw(isObjective);
 		this.mainLoop.drawLoopBases(isObjective);
 	}
 	
@@ -114,13 +127,13 @@ function DrawMol(mol)
 		var h=rank+1;
 		while(h<this.mol.structure[rank])
 		{
-			var newBase = new Base(h,this.mol.bases[h] , rBase);
+			var newBase = new Base(h,this.mol.bases[h], this.rBase);
 			loop.addBase(newBase);
 			//bond between k and another Base (not the last one)
 			if(this.mol.structure[h]>h)
 			{
 			var newBase1 = new Base(this.mol.structure[h],
-				this.mol.bases[this.mol.structure[h]],rBase);
+				this.mol.bases[this.mol.structure[h]],this.rBase);
 			loop.addBase(newBase1);
 			
 			var newLoop = new Loop(newBase,newBase1);
