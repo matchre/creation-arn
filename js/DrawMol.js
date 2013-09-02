@@ -95,7 +95,7 @@ function DrawMol(mol)
 				
 	}
 	
-	this.draw=function(isObjective)
+	this.draw=function(isObjective, struct)
 	{
 		var canvas;
 		if(isObjective)
@@ -114,13 +114,16 @@ function DrawMol(mol)
 			//does not work properly
 		//We draw the skeleton :
 		this.mainLoop.drawMainLoop(
-			(this.mol.structure[0]==(this.mol.size-1)),isObjective);
+			(this.mol.structure[0]==(this.mol.size-1)),isObjective,
+			this.getRightBonds(struct));
 		//We draw the bases:
-		this.mainLoop.firstBase.draw(isObjective);
-		this.mainLoop.lastBase.draw(isObjective);
+		var isObj=0;
+		if(!isObjective)
+			isObj=1;
+		this.mainLoop.firstBase.draw(isObj);
+		this.mainLoop.lastBase.draw(isObj);
 		this.mainLoop.drawLoopBases(isObjective);
 	}
-	
 	//rank is the rank of the first base of the Loop loop
 	this.fillLoop=function(loop,rank)
 	{
@@ -144,5 +147,22 @@ function DrawMol(mol)
 			else//no bond with k
 				h++;
 		}
+	}
+	//return a list of the bonds in this.mol which are the same as
+	//struct (a bond is identified with his the first base)
+	this.getRightBonds = function(struct)
+	{
+		var listRight=new Array();
+		if(struct===undefined)
+			return listRight;
+		for(var i=0; i<mol.size; i++)
+		{
+			if(this.mol.structure[i]>i
+				&& this.mol.structure[i]==struct[i] )
+			{
+				listRight.push(i);
+			}
+		}
+		return listRight;
 	}
 }

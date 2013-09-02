@@ -27,17 +27,19 @@ function Base(rank, nat, rBase)
 		else
 			this.nat+=1;
 		
-		this.draw(false);
+		this.draw(1);
 	}   
       
 	this.draw = function(isObjective)
     {
 		var canvas;
-		if (isObjective)
+		if (isObjective==0)
 			canvas = document.getElementById("objective");
-		else
+		else if(isObjective==1)
 			canvas = document.getElementById("playerScreen");
-		
+		else
+			canvas = document.getElementById("margeCanvas");
+
 		if (!canvas.getContext) return;
 		
 		var ctx = canvas.getContext("2d");
@@ -96,11 +98,10 @@ function Base(rank, nat, rBase)
 		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();
-		if(this.rank%5==4 || this.rank==0)//only useful for big molecules
-		{
-			ctx.font=this.r+'px Georgia';
-			(this.nat==0)?ctx.fillStyle='white':ctx.fillStyle='black';
-			ctx.fillText((this.rank+1),(this.X-(this.r/2)),(this.Y+(this.r/3)));
-		}
+		ctx.font=this.r+'px Georgia';
+		(this.nat==0)?ctx.fillStyle='white':ctx.fillStyle='black';
+		ctx.fillText((this.rank+1),(this.X-(this.r/2)),(this.Y+(this.r/3)));
+		
 	}
+
 }

@@ -2,26 +2,53 @@ body
 {
 	background-color : rgb(255,255,255);
 	color : black;
+	font-family : cursive;
+}
+h1
+{
+	font-size : 20px;
+	text-align : center;
+	background-color : #FFFF66;
+}
+h2
+{
+	font-size : 14px;
+	text-align : center;
+}
+/**BUTTONS**/
+.rules, #returnTextLevel, #returnLevel
+{
+	width : 80px;
+	display : block;
+	margin-right : auto;
+	margin-left : auto;
+	color : purple;
+	font-size : 18px;
 
 }
+#returnGame
+{
+	width : 140px;
+	display : block;
+	margin-right : auto;
+	margin-left : auto;
+	color : green;
+	font-size : 18px;
 
-#playerScreen, #objective
-{
-	user-select:none;
-	-webkit-user-select:none;
-	-moz-user-select:none;
-	border : 2px solid;
-	border-color : black; 
-	margin-left:auto;
-	margin-right:auto;
-	width :48%;
-	background-color : aqua;
 }
-#screens
+#news
 {
-	width : 80%;
+	color : green;
+	font-size : 18px;
+	margin : 7px;
+}
+#next
+{
 	float : right;
-	padding : 0px;
+}
+#previous
+{
+	float : left;
 }
 #buttons
 {
@@ -29,33 +56,6 @@ body
 	float : right;
 	margin-right : 20px;
 }
-#info
-{
-	width : 55%;
-	margin-left : auto;
-	margin-right : auto;
-	padding-left : 10px;
-	padding-right : 10px;
-	text-align : center;
-	font-style : italic;
-	background-color : rgb(216,216,216);
-}
-
-#nbOfBondsObj
-{
-	font-weight : bold;
-	margin-right : 10px;
-}
-
-#start
-{
-	color : green;
-	font-size : 20px;
-	float : left;
-	margin-left : auto;
-	margin-right : auto;
-}
-
 #switch
 {
 	float : right;
@@ -68,7 +68,91 @@ body
 	height : 40px;
 	width : 40px;
 }
+#impossible
+{
+	width : 200px;
+	display : block;
+	font-size : 20px;
+	color : blue;
+	margin-left : auto;
+	margin-right : auto;
+}
+#levelMenu
+{
+	margin : 7px;
+	font-size : 20px;
+	font-weight : bold;
+	color : purple;
+}
+#restart
+{
+	font-size : 15px;
+	font-weight : bold;
+	color : black;
+	padding : 3px;
+}
+input.levelButton
+{
+	color : black;
+	margin : 6px;
+	font-weight : bold; 
+	z-index : 12;
+}
+input.levelButton:active
+{
+	position:relative;
+	left : 2px;
+	top : 2px;
+}
+/**SCREENS**/
+#playerScreen, #objective
+{
+	user-select:none;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	border : 2px solid;
+	border-color : black; 
+	margin-left:auto;
+	margin-right:auto;
+	width :48%;
+	background-color : #B2DAF0;
+}
+#objective
+{
+	background-color : #C2C2A3;
+}
+#margeCanvas
+{
+	margin-left:auto;
+	margin-right:auto;
+	width : 100%;
+	height : 100%;
+	background-color : #B2DAF0;
 
+}
+#screens
+{
+	width : 80%;
+	float : right;
+	padding : 0px;
+}
+/**Texts**/
+#info
+{
+	width : 75%;
+	margin-left : auto;
+	margin-right : auto;
+	padding-left : 10px;
+	padding-right : 10px;
+	text-align : center;
+	font-style : italic;
+	background-color : rgb(216,216,216);
+}
+#nbOfBondsObj
+{
+	font-weight : bold;
+	margin-right : 10px;
+}
 #timeLeft
 {
 	color : green;
@@ -76,47 +160,41 @@ body
 	font-family : "impact", fantasy;
 	margin-right : 20px;
 }
-
-#impossible
+.instructions, #textLevel
 {
-	font-size : 20px;
-	color : blue;
-	margin-left : auto;
-	margin-right : auto;
+	line-height : 1.5;
+	font-size : 16;
+	background-color : #B2DAF0;
 }
-
+/*MARGE*/
 #marge
 {
 	float : left;
 	width : 150px;
-	background-color : rgb(216,216,216);
+	background-color : white;
 	color : black;
 	text-align : center;
-	padding : 5px;
 	margin : 3px;
+	overflow : hidden;
 }
-
-#instructions
+/**Pop-Up**/
+#popUp
 {
-	overflow-y: scroll;
-}
-
-#levelMenu
-{
-	margin : 20px;
-	font-size : 20px;
-	font-weight : bold;
-	color : purple;
-}
-
-#levelName
-{
-	font-size : 15px;
-	font-weight : bold;
-	color : black;
+	display : none;
+	position: fixed;
+	top: 20%;
+	left : 20%;
+	width : 60%;
+	height : 60%;
+	max-height : 400px;
 	padding : 5px;
+	margin : 0;
+	border : 1px solid black;
+	background-image :url('img/levelBackground.png');
+	background-position : center;
+	z-index : 12;
+	overflow : auto;
 }
-
 #shadowing
 {
 	display:none;
@@ -130,9 +208,9 @@ body
 	opacity:0.9;
 	filter:alpha(opacity=50);
 }
-
 #selectLevel
 {
+	text-align : center;
 	display: none;
 	position: fixed;
 	top: 20%;
@@ -147,35 +225,4 @@ body
 	background-position : center;
 	z-index : 11;
 	overflow : auto;
-}
-
-input.levelButton
-{
-	color : black;
-	margin : 6px;
-	font-weight : bold; 
-	z-index : 12;
-}
-
-input.levelButton:active
-{
-	position:relative;
-	left : 2px;
-	top : 2px;
-}
-h1
-{
-	font-size : 20px;
-	text-align : center;
-	background-color : yellow;
-}
-#basesColor
-{
-	background-color : rgb(216,216,216);
-	display : none;
-}
-h2
-{
-	font-size : 17px;
-	text-align : center;
 }

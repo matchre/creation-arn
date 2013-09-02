@@ -26,39 +26,16 @@ var answer;//molecule which is a solution
 var attempts;//count the number of attempts
 var timeLeft;//the time(sec.) the player have to find the answer
 var timer=0;//timer id
-var presentationString;
 var keyDown = false;//==true if a key is down 
 					//when the cursor is over playerScreen
-var firstPlay=0;
 var listOptStructures;//list of optimized structure for playerMol.bases
-
-$(function() {//we wait for the DOM
-	presentationString = $('#instructions').text();
+var margeCanvasNum=0;//constant to switch the canvas in the marge
+$(function() {//we wait for the DOM	presentationString = $('#instructions').text();
 	initCanvas();
 	initEffects();
+	drawMargeCanvas();
 	initLevels();//and initGame when level file loaded
-	//~ test();
 });
-/*
-test=function()
-{
-	var mol= new Molecule('AGCA');
-	mol.maxOfBonds();
-	console.log(mol.nbOfBonds);
-	console.log(mol.structure);
-	//~ for(var k=0; k<3; k++)
-		//~ console.log(mol.listOptStructures[100+k]);
-	console.log(mol.listOptStructures);
-	//~ var tab=[1,1,1];
-	//~ var t=[0,2,4];
-	//~ console.log(tab.concat(t));
-	//~ var tt= new Array();
-	//~ tt.unshift(tab);
-	//~ tt.unshift(t);
-	//~ console.log(tt);
-	//~ console.log(tt[1]);
-}
-*/
 function getMode() 
 {
 	 return mode;
@@ -76,6 +53,7 @@ function initGame()
 	quit=0;
 	mode=-1;
 	attempts=0;
+	margeCanvasNum=0;
 	
 	//we clear both canvas
 	var canvas0 = document.getElementById('objective');
@@ -91,22 +69,11 @@ function initGame()
 
     $('#title').css('display', 'block');
 	$('#basesColor').css('display', 'none');
-	if(firstPlay=0)
-		$('#instructions').text(presentationString);
-    $('#start').css('display', 'none');
     $('#impossible').css('display','none');
     $('#timeLeft').text('');
     $('#nbPosPlayer').text('');
 	$('#nbOfBondsPlayer').text('');
 	$('#nbOfBondsObj').text('');
-	firstPlay=1;
-}
-
-function startTuto()
-{
-	alert(currentLevel.comments);
-	$('#start').css('display', 'block');
-	drawCanvasTuto();
 }
 
 function switchMol()
@@ -118,11 +85,21 @@ function switchMol()
 	
 	playerMol.modifiableBases = modBases;
 	
+	var n=answer.structure.compareTo(playerMol.structure);
+	$('#nbOfValidBonds').text(n);
+	if(n==answer.nbOfBonds)
+		$('#nbOfValidBonds').css('color','green');
+	else
+	{
+		$('#nbOfValidBonds').css('color','red');
+		$('#nbOfValidBonds').css('font-weight','bold');
+	}
+	
 	resetCanvas(false);
 	playerDrawMol= new DrawMol(playerMol);
 	playerDrawMol.build(false);
 	playerDrawMol.mainLoop.setModifiable(modBases);
-	playerDrawMol.draw(false);
+	playerDrawMol.draw(false, answer.structure);
 
 	if(playerMol.structure.equal(answer.structure))
 	{
@@ -142,11 +119,19 @@ function switchMol()
 function start()
 {
 	if(currentLevel.password=='OOOO')
-		$('#margeTitle').text('Présentation');
-	else
-		$('#margeTitle').text('INDICATIONS');
-	$('#title').css('display', 'none');
-	$('#basesColor').css('display', 'block');
+	{
+		$('#timeLeft').css('display','none');
+		alert(currentLevel.comments);
+	}
+	else//no timer if tutorial level
+	{
+		$('#timeLeft').css('display','inline');
+		$('#timeLeft').css('color','green');
+		runTimer(currentLevel.timeLimit);
+	}
+		//change title : print indications
+	//~ $('#title').css('display', 'none');
+	//~ $('#basesColor').css('display', 'block');
 	running=1;
 	keyDown=0;
 	if(memNumLevel!=currentLevel.num)
@@ -157,16 +142,10 @@ function start()
 	if(currentLevel.oneOptStructOnly != -1)
 		$('#impossible').css('display','block');
 		
-	$('#levelName').text(currentLevel.name);
-	$('#levelName').css('background-color',currentLevel.color);
-	
-	if(currentLevel.password!='OOOO')//keep rules if tutorial level
-	{
-		$('#instructions').text(currentLevel.comments);
-		runTimer();
-	}
-	
-	//We chose the molecule to find : answers[goal]
+	$('#restart').css('background-color',currentLevel.color);
+	$('#textLevel').text(currentLevel.comments);
+		
+	//We chose the molecule to find
 	from = getRandomNumber();
 	
 	if(currentLevel.solution!='')
@@ -180,17 +159,37 @@ function start()
 		answer.structure = currentLevel.targetStructure;
 		answer.setNbBondsFromStruct();
 	}
-	playerMol = new Molecule(currentLevel.incompleteSeq[from]);
+	
+	//A check point...
+	if(answer.size!=answer.structure.length)
+	{
+		alert('Ce niveau contient une erreur, veuillez choisir un'+
+		' autre niveau. ');
+		initGame();
+	}
+	
+	//we construct playerMol and objMol (figure in objectiveCanvas)
+	var s=currentLevel.incompleteSeq[from];
+	var objMol = new Molecule(s);
+	objMol.structure=answer.structure;
+	playerMol = new Molecule(OToA(s));
+	playerMol.maxOfBonds();
+	playerMol.modifiableBases=objMol.modifiableBases;//points
+													//on the same array
 	$('#nbOfBondsObj').text(answer.nbOfBonds);
-	answer.structure.copy(playerMol.structure);
-
+	$('#nbOfValidBonds').text(
+		answer.structure.compareTo(playerMol.structure));
+	
 	playerDrawMol= new DrawMol(playerMol);
-	playerDrawMol.build(true);
-	playerDrawMol.draw(true);
+	objDrawMol = new DrawMol(objMol);
+	objDrawMol.build(true);
+	objDrawMol.draw(true);
 	resetCanvas(true);
 	printTitleObjective();
 	playerDrawMol.build(false);
-	playerDrawMol.draw(false);
+	playerDrawMol.mainLoop.setModifiable(playerMol.modifiableBases);	
+	playerDrawMol.draw(false, answer.structure);
+	
 }
 
 function gameOver()
@@ -200,8 +199,7 @@ function gameOver()
 	clearInterval(timer);
 	if(currentLevel.password=='OOOO')
 	{
-		alert('Désolé, vous avez perdu !\n'
-			+'Cliquez sur MENU pour commencer une autre partie.\n');
+		alert('Désolé, vous avez perdu !');
 	}
 	else
 	{
@@ -211,7 +209,6 @@ function gameOver()
 			+'Nombre de coups : '+attempts+'\n' 
 			+'Votre proposition admet '
 			+playerMol.nbOptStructures+' structures possibles.\n'
-			+'Cliquez sur MENU pour commencer une autre partie.\n'
 			+ 'Mot de passe de ce niveau : '+ currentLevel.password);
 	}
 	if(PRINT_ANSWER)
@@ -219,10 +216,13 @@ function gameOver()
 		var objDrawMol = new DrawMol(answer);
 		objDrawMol.build(true);
 		objDrawMol.draw(true);
+		resetCanvas(true);
+		resetCanvas(false);
+		quit=1;
 	}
-	resetCanvas(true);
-	resetCanvas(false);
-	quit=1;
+	else
+		initGame();
+	
 }
 
 function won()
@@ -231,14 +231,13 @@ function won()
 		return;
 	clearInterval(timer);
 	var l=getLevel(currentLevel.num + 3);
-	if(currentLevel.password=='OOOO')
+	if(currentLevel.password=='OOOO' && l.password!='OOOO')
 	{
 		alert('Félicitations, vous avez gagné !\n'
-			+'Cliquez sur MENU pour commencer une autre partie.\n'
 			+ 'Mot de passe du niveau ' + l.name +' ('+ l.num+' ) :\n'
 			+ l.password);
 	}
-	else
+	else if(l.password!='OOOO')
 	{
 	alert('Félicitations, vous avez gagné !\n'
 			+'Temps : '+(currentLevel.timeLimit-timeLeft)
@@ -246,17 +245,20 @@ function won()
 			+'Nombre de coups '+attempts 
 			+'\n Votre proposition admet '
 			+playerMol.nbOptStructures+' structures possibles.\n'
-			+' Cliquez sur MENU pour commencer une autre partie.\n'
 			+ 'Mot de passe du niveau ' + l.name +' ('+ l.num+' ) :\n'
 			+ l.password);
 	}
+	else if(currentLevel.password=='OOOO')//l is a tutorial level
+		alert('Félicitations, vous avez gagné !');
+	else//l is a tutorial level
+		alert('Félicitations, vous avez gagné !\n'
+			+'Temps : '+(currentLevel.timeLimit-timeLeft)
+			+' secondes \n'
+			+'Nombre de coups '+attempts 
+			+'\n Votre proposition admet '
+			+playerMol.nbOptStructures+' structures possibles.');
 	l.authorise(true);
-	var objDrawMol = new DrawMol(answer);
-	objDrawMol.build(true);
-	objDrawMol.draw(true);
-	resetCanvas(true);
-	resetCanvas(false);
-	quit=1;
+	initGame();
 }
 
 function attempt()
@@ -353,7 +355,7 @@ function attempt()
 					intermPlayerBases[k].Y);
 				ctx.lineTo(intermPlayerBases[n].X,
 					intermPlayerBases[n].Y);
-				ctx.strokeStyle = "blue";
+				ctx.strokeStyle = "red";
 				ctx.lineWidth = 5;
 				ctx.stroke();
 				ctx.closePath();
@@ -373,7 +375,7 @@ function attempt()
 		}
 		
 		for(var k=0; k<playerMol.size; k++)
-			intermPlayerBases[k].draw(false);
+			intermPlayerBases[k].draw(1);
 		
 	}
 	this.end = function()
@@ -382,8 +384,8 @@ function attempt()
 		//draw the new final player molecule
 		resetCanvas(false);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		playerDrawMol.draw(false);
-		//playerDrawMol.mainLoop.print();
+		playerDrawMol.draw(false, answer.structure);
+		//~ playerDrawMol.mainLoop.print();
 		
 		
 		/*****/
@@ -394,14 +396,20 @@ function attempt()
 		
 		if(playerMol.nbOptStructures==1)
 			$('#nbPosPlayer').css('color','green');
+		else if(currentLevel.oneOptStructOnly!=-1)
+			$('#nbPosPlayer').css('color','red');
 		else
 			$('#nbPosPlayer').css('color','black');
-			
-		$('#nbOfBondsPlayer').text(playerMol.nbOfBonds);
-		if(playerMol.nbOfBonds==answer.nbOfBonds)
-			$('#nbOfBondsPlayer').css('color','green');
+		
+		var n=answer.structure.compareTo(playerMol.structure);
+		$('#nbOfValidBonds').text(n);
+		if(n==answer.nbOfBonds)
+			$('#nbOfValidBonds').css('color','green');
 		else
-			$('#nbOfBondsPlayer').css('color','black');
+		{
+			$('#nbOfValidBonds').css('color','red');
+			$('#nbOfValidBonds').css('font-weight','bold');
+		}
 		/******/
 		running=1;
 		if(playerMol.structure.equal(answer.structure))
@@ -418,7 +426,6 @@ function attempt()
 		}
 	}
 }
-
 //return true if the two arrays are exactly the same
 Array.prototype.equal = function(array)
  {
@@ -439,6 +446,16 @@ Array.prototype.copy = function(array)
         for(var i=0; i<this.length; i++)
 			array[i]=this[i];
  }
+//return the number valid bonds
+Array.prototype.compareTo = function(array)
+ {
+	var tot=0;
+    for(var i=0; i<this.length; i++)
+		if(array[i]==this[i] && this[i]!=-1)
+			tot++;
+	return(tot/2);//tot is an even number
+ }
+
 //return a random number from pool and delete it
 function getRandomNumber()
 {
@@ -478,7 +495,7 @@ resetCanvas = function(isObjective)
 	
 	ctx.setTransform(1,0,0,1,0,0);
 }
-
+//Print the title of objective canvas
 function printTitleObjective()
 {
 	canvas = document.getElementById("objective");
@@ -489,28 +506,32 @@ function printTitleObjective()
 	ctx.fillStyle='black';
 	ctx.fillText("Objectif",5,canvas.height-5,canvas.width);
 }
-//for debug mode:
-String.prototype.replaceAt=function(index, char) 
+//change all 'O' of a string to 'A'
+function OToA(string)
 {
-	var s = this.substr(0, index)+char
-		+this.substr(index+char.length);
+	var s='';
+	for(var i=0; i<string.length; i++)
+	{
+		if(string.charAt(i)=='O')
+			s+='A';
+		else
+			s+=string.charAt(i);
+	}
 	return s;
 }
-
-function runTimer()
+//launch the timer
+function runTimer(t)
 {
-	timeLeft = currentLevel.timeLimit;
+	timeLeft = t;
 	timer = setInterval(function(){
 		timeLeft--;
-		if(timeLeft>10)
-			$('#timeLeft').css('color','green');
-		else if(timeLeft<5)
-			$('#timeLeft').css('color','red');
-		else
-			$('#timeLeft').css('color','orange');
+	if(timeLeft<5)
+		$('#timeLeft').css('color','red');
+	else if (timeLeft<10)
+		$('#timeLeft').css('color','orange');
 		
-		$('#timeLeft').text(timeLeft);
-		if(timeLeft<=0)
-			gameOver();
-		},1000);
+	$('#timeLeft').text(timeLeft);
+	if(timeLeft<=0)
+		gameOver();
+	},1000);
 }

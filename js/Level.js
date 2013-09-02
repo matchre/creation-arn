@@ -3,10 +3,10 @@
 //molecule solution : the program will construct the optimal structure
 //by itself.
 
-//from 1 to levels.length, Level0.num<Level1.num means Level1 is harder
-//than Level0
+//Level.num : from 1 to levels.length, Level0.num<Level1.num means 
+//Level1 is harder than Level0
 
-//OOOO password is reserved for the tutorial level
+//OOOO password is reserved for the tutorial levels. It identify them
 
 //for one optimum only write:
 //  one structure only:{possible} if the ARN sequence is possible
@@ -178,8 +178,13 @@ Level = function(str, col)
 		}).appendTo('#selectLevel');
 		
 		$("#"+this.num).css('background-color',this.color);
+		$("#"+this.num).css('margin-top','20px');
 		
-		this.authorise(this.authorised);
+		if(this.authorised)
+			$("#"+this.num).css('background-color', this.color);
+		else
+			$("#"+this.num).css('background-color', 'grey');
+			
 		var l=this;//In the event, we cannot refer to this !
 		$("#"+l.num).click(function() {
 			
@@ -189,10 +194,7 @@ Level = function(str, col)
 				$('#shadowing').css('display','none');
 				
 				currentLevel=l;
-				if(l.password=='OOOO')
-					startTuto();
-				else
-					start();	
+				start();	
 			}
 			else
 			{

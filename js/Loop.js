@@ -137,7 +137,9 @@ function Loop(firstBase, lastBase)
 	}
 
 	//draw the skeleton of the current Loop and his sons
-	this.draw = function(isObjective)
+	//draw in blue all the bonds which are the same as the answer
+	//and in red all others
+	this.draw = function(isObjective, list)
 	{
 		
 		if (isObjective)
@@ -151,7 +153,15 @@ function Loop(firstBase, lastBase)
 		ctx.beginPath();
 		ctx.moveTo(this.firstBase.X,this.firstBase.Y);	
 		ctx.lineTo(this.lastBase.X,this.lastBase.Y);
-		ctx.strokeStyle = "blue";
+		if(list===undefined || isObjective)
+			ctx.strokeStyle = "blue";
+		else
+		{
+			if(list.indexOf(this.firstBase.rank)!=-1)
+				ctx.strokeStyle = "blue";//right bong
+			else
+				ctx.strokeStyle = "red";//wrong bond
+		}
 		ctx.lineWidth = 5;
 		ctx.stroke();
 		ctx.closePath();
@@ -241,15 +251,15 @@ function Loop(firstBase, lastBase)
 		ctx.closePath();
 		
 		for(var k=0; k<this.sons.length; k++)
-			this.sons[k].draw(isObjective);
+			this.sons[k].draw(isObjective,list);
 	}
 	//draw the skeleton of the main loop
-	this.drawMainLoop= function(isBuckled, isObjective)
+	this.drawMainLoop= function(isBuckle, isObjective, list)
 	{
 		
-		if(isBuckled)
+		if(isBuckle)
 		{
-			this.draw(isObjective);
+			this.draw(isObjective, list);
 			return;
 		}
 		//No bond between firstBase and lastBase
@@ -284,14 +294,17 @@ function Loop(firstBase, lastBase)
 		ctx.closePath();
 		
 		for(var k=0; k<this.sons.length; k++)
-			this.sons[k].draw(isObjective);
+			this.sons[k].draw(isObjective, list);
 	}
 	//draw the bases:
 	this.drawLoopBases= function(isObjective)
 	{
+		var isObj=0;
+		if(!isObjective)
+			isObj=1;
 		//lastBase and firstBase are drawn in the parent Loop
 		for(var j=0; j<this.arrayBases.length; j++)
-			this.arrayBases[j].draw(isObjective);
+			this.arrayBases[j].draw(isObj);
 		
 		for(var k=0; k<this.sons.length; k++)
 			this.sons[k].drawLoopBases(isObjective);
