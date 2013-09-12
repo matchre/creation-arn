@@ -339,7 +339,7 @@ function drawMargeCanvas()
 			ctx.font=(r-1)+'px Georgia';
 			ctx.fillStyle='black';
 			ctx.fillText('Une liaison',0.5*r,9*r);
-			ctx.fillText('comforme',0.5*r,10*r);
+			ctx.fillText('conforme',0.5*r,10*r);
 			ctx.fillText('à l\'objectif',0.5*r,11*r);
 			
 			ctx.beginPath();
