@@ -1,11 +1,22 @@
 /*main.js*/
 
 //to unlock any level, use password : inria2013
-/****/
+/**CONSTANTS TO BE MODIFIED**/
+
 var TRANSITION_TIME=1000;//transition time between two molecules (ms)
 var TRANSITION_STEPS=10;//step number between two molecules
 var MAX_OPT_STRUCTURES=75;//number of co-optimal structures determined
-var PRINT_ANSWER=false;
+var PRINT_ANSWER_LOST=true;//print the answer when the player has lost
+var PRINT_ANSWER_WON=true;//print the answer when the player has won
+var DIST_MAX_SWAP;//distance over which a click of the player is not
+				//taken into account -> go to setMaxDistSwap() (l.53) to 
+				//define it as a function of playerScreen.width
+var PRINT_LOOSER=true;//if false, do not print any message when the
+					//player has lost
+					//-> to change the text go to gameOver() l.208 of 
+					//this file and
+					//l. 104 of effects.js (in initEffects())
+
 /****/
 var ie = (document.all && !window.opera)?true:false;//true if IE
 var running=0;//running if running==1
@@ -33,12 +44,14 @@ var margeCanvasNum=0;//constant to switch the canvas in the marge
 $(function() {//we wait for the DOM	presentationString = $('#instructions').text();
 	initCanvas();
 	initEffects();
+	setMaxDistSwap();
 	drawMargeCanvas();
 	initLevels();//and initGame when level file loaded
 });
-function getMode() 
+
+function setMaxDistSwap()
 {
-	 return mode;
+	DIST_MAX_SWAP=$('#playerScreen').width()/5;
 }
 
 function drawMode()
@@ -197,11 +210,11 @@ function gameOver()
 	if(quit==1)
 		return;
 	clearInterval(timer);
-	if(currentLevel.password=='OOOO')
+	if(currentLevel.password=='OOOO' && PRINT_LOOSER)
 	{
 		alert('Désolé, vous avez perdu !');
 	}
-	else
+	else if(PRINT_LOOSER)
 	{
 	alert('Désolé, vous avez perdu !\n'
 			+'Temps : '+(currentLevel.timeLimit-timeLeft)
@@ -211,7 +224,7 @@ function gameOver()
 			+playerMol.nbOptStructures+' structures possibles.\n'
 			+ 'Mot de passe de ce niveau : '+ currentLevel.password);
 	}
-	if(PRINT_ANSWER)
+	if(PRINT_ANSWER_LOST)
 	{
 		var objDrawMol = new DrawMol(answer);
 		objDrawMol.build(true);
@@ -258,7 +271,17 @@ function won()
 			+'\n Votre proposition admet '
 			+playerMol.nbOptStructures+' structures possibles.');
 	l.authorise(true);
-	initGame();
+	if(PRINT_ANSWER_WON)
+	{
+		var objDrawMol = new DrawMol(answer);
+		objDrawMol.build(true);
+		objDrawMol.draw(true);
+		resetCanvas(true);
+		resetCanvas(false);
+		quit=1;
+	}
+	else
+		initGame();
 }
 
 function attempt()

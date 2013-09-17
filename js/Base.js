@@ -16,7 +16,7 @@ function Base(rank, nat, rBase)
 	this.X;
 	this.Y;
 	this.r=rBase;//radius
-	this.natDef=(nat!=0);//if true when created, can't swap
+	this.natDef=(nat!=0);//if true, can't swap
 	
 	this.swap = function()
 	{
@@ -44,6 +44,10 @@ function Base(rank, nat, rBase)
 		
 		var ctx = canvas.getContext("2d");
 		ctx.beginPath();
+		
+		/**Change here the appearance of a modifiable Base:
+		 * first the stroke and then the color of the filling : **/
+		
 		if(this.natDef)
 		{
 			ctx.strokeStyle = "white";

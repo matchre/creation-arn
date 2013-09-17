@@ -41,8 +41,8 @@ function initEffects()
 	$("#playerScreen").keydown(function(e) {
 		keyDown=1;
 	});
-	$("#playerScreen").keyup(function(e) {
-		if(running==0 || quit==1)
+	$(document).keyup(function(e) {
+		if(running==0 || quit==1 || keyDown==0)
 			return;
 		keyDown=0;
 		attempt();
@@ -79,11 +79,15 @@ function initEffects()
 		
 		//~ console.log('after scaling x: '+x+' y: '+y);		
 		var getMin = playerDrawMol.mainLoop.getBase(x,y);
+		if(getMin.minDist>DIST_MAX_SWAP)
+			return;
+			
+			
 		getMin.closest.swap();
 		//~ console.log('Base: '+getMin.closest.rank +'  '+getMin.minDist
 							//~ +' x: '+getMin.closest.X+' y: '
 							//~ +getMin.closest.Y);
-		
+				
 		if(!keyDown)
 			attempt();
 	});
@@ -98,14 +102,21 @@ function initEffects()
 			gameOver();
 	});
 	$('#restart').click(function() {
-		if(confirm('Voulez-vous vraiment quitter et recommencer ce niveau ?'))
+		if(quit==1)
+		{
+			initGame()
+			$('#selectLevel').css('display','none');
+			$('#shadowing').css('display','none');
+			start();
+		}
+		else if(confirm('Voulez-vous vraiment quitter et recommencer ce niveau ?'))
 		{
 				clearInterval(timer);
-			if(currentLevel.password=='OOOO')
+			if(currentLevel.password=='OOOO' && PRINT_LOOSER)
 			{
 				alert('Désolé, vous avez perdu !');
 			}
-			else
+			else if(PRINT_LOOSER)
 			{
 			alert('Désolé, vous avez perdu !\n'
 				+'Temps : '+(currentLevel.timeLimit-timeLeft)

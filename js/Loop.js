@@ -357,7 +357,7 @@ function Loop(firstBase, lastBase)
 	//the closest of (x,y) point
 	this.getBase=function(x,y)
 	{
-		var minDist=50000;//= infinity
+		var minDist=9999999;//= infinity
 		var closest;
 		var newDist=distance(this.firstBase.X,this.firstBase.Y,x,y);
 		if(minDist > newDist && !this.firstBase.natDef)
@@ -459,12 +459,15 @@ function Loop(firstBase, lastBase)
 					this.firstBase.r);
 		tabBases[this.firstBase.rank].X = this.firstBase.X;
 		tabBases[this.firstBase.rank].Y = this.firstBase.Y;
+		tabBases[this.firstBase.rank].natDef = this.firstBase.natDef;
 		tabBases[this.lastBase.rank]
 				= new Base(this.lastBase.rank,
 					this.lastBase.nat,
 					this.lastBase.r);
 		tabBases[this.lastBase.rank].X = this.lastBase.X;
 		tabBases[this.lastBase.rank].Y = this.lastBase.Y;
+		tabBases[this.lastBase.rank].natDef = this.lastBase.natDef;
+		
 		
 		for(var j=0; j<this.arrayBases.length; j++)
 		{
@@ -474,6 +477,8 @@ function Loop(firstBase, lastBase)
 					this.arrayBases[j].r);
 			tabBases[this.arrayBases[j].rank].X = this.arrayBases[j].X;
 			tabBases[this.arrayBases[j].rank].Y = this.arrayBases[j].Y;
+			tabBases[this.arrayBases[j].rank].natDef =
+											this.arrayBases[j].natDef;
 		}
 		for(var k=0; k<this.sons.length; k++)
 			this.sons[k].copyBases(tabBases);
